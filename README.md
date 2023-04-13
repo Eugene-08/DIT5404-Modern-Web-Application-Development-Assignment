@@ -15,14 +15,5 @@ npm install yarn
 yarn
 ```
 
-#### Compiles and hot-reloads for frontend
-##### 1 terminal for frontend (file located at ".../movie-web")
-```
-yarn dev
-```
-
-#### Compiles and hot-reloads for backend
-##### 1 terminal for backend  (file located at ".../movie-server")
-```
-yarn start
+#### Total of 2 terminals are used
 ```

@@ -11,7 +11,7 @@ npm install yarn
 yarn
 ```
 
-#### Compiles and hot-reloads for frontend development
+#### Compiles and hot-reloads for backend development 
 ```
-yarn dev
+yarn start
 ```
