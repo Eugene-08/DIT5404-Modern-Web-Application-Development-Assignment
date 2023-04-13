@@ -1,0 +1,67 @@
+//@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700&display=swap');
+@font-face {
+  font-family: 'Noto Sans HK';
+  src: local('Noto Sans HK'), url(./resources/fonts/NotoSansHK-Regular.otf) format('opentype');
+}
+@font-face {
+  font-family: 'Noto Sans HK';
+  font-weight: bold;
+  src: local('Noto Sans HK'), url(./resources/fonts/NotoSansHK-Bold.otf) format('opentype');
+}
+@font-face {
+  font-family: 'Noto Sans HK';
+  font-weight: 100;
+  src: local('Noto Sans HK'), url(./resources/fonts/NotoSansHK-Thin.otf) format('opentype');
+}
+@font-face {
+  font-family: 'Noto Sans HK';
+  font-weight: 300;
+  src: local('Noto Sans HK'), url(./resources/fonts/NotoSansHK-Light.otf) format('opentype');
+}
+@font-face {
+  font-family: 'Noto Sans HK';
+  font-weight: 500;
+  src: local('Noto Sans HK'), url(./resources/fonts/NotoSansHK-Medium.otf) format('opentype');
+}
+@font-face {
+  font-family: 'Noto Sans HK';
+  font-weight: 900;
+  src: local('Noto Sans HK'), url(./resources/fonts/NotoSansHK-Black.otf) format('opentype');
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans HK','Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.modal {
+  z-index: 10000;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* remove focus outline for datagrid */
+:focus,
+:focus-visible,
+:focus-within {
+  outline: unset !important;
+}
