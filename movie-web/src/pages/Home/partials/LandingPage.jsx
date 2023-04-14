@@ -28,8 +28,8 @@ function LandingPage() {
   //   }
   // }, [authState.redirectTom, localStorage.getItem("token")]);
 
-  function handleScrollDownToFeaturesZigzag() {
-    document.getElementById("FeaturesZigzag").scrollIntoView({
+  function handleScrollDownToTestimonials() {
+    document.getElementById("Testimonials").scrollIntoView({
       behavior: "smooth",
       block: "start",
       inline: "nearest"
@@ -78,7 +78,7 @@ function LandingPage() {
             </p>
             <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
               <div data-aos="fade-up" data-aos-delay="400">
-                <StyledButton label={"See Top 10"} onClick={handleScrollDownToFeaturesZigzag} />
+                <StyledButton label={"See My Favourite"} onClick={handleScrollDownToTestimonials} />
               </div>
               <div data-aos="fade-up" data-aos-delay="600">
                 <StyledButton label={"Search Movie"} onClick={handleSearchMoviePage} color={"secondary"} sx={{ ml: 2 }} />

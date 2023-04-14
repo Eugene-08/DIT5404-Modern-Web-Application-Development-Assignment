@@ -9,21 +9,20 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
 export function StyledModal(props) {
-    const { children, innerDivId, title, width = { xs: "90vw", sm: "550px", lg: "550px" }, id = '', ...modal } = props;
-
-    const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: width,
-        bgcolor: "background.paper",
-        boxShadow: 24,
-        p: 2,
-        maxHeight: "90vh",
-
-        borderRadius: "5px"
-    };
+    const { children, innerDivId, title, width = { xs: "90vw", sm: "550px", lg: "550px" }, id = '',
+        style = {
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: width,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 2,
+            maxHeight: "90vh",
+            borderRadius: "5px"
+        }
+        , ...modal } = props;
 
     return (
         <Modal {...modal}>

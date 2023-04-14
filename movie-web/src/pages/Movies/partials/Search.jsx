@@ -5,12 +5,13 @@ import { SearchForm, TextSearch } from '../../../utils/FormUtil';
 import { Container } from '../../../utils/Container';
 import { StyledModal } from '../../../utils/StyleModal';
 import { StyledButton } from '../../../utils/Button';
-import { selectMovie, searchMovie, rateMovie, getMovie } from '../../../store/reducers/movie';
+import { selectMovie, searchMovie, rateMovie, getMovie, addFavourite } from '../../../store/reducers/movie';
 import { selectAuth } from '../../../store/reducers/auth';
 import { handleSetPopupMessage } from '../../../store/reducers/util';
 import { ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core';
-import { CardActionArea, Typography, CardMedia, CardContent, Card, Grid, Button, Rating } from '@mui/material';
+import { CardActionArea, Typography, CardMedia, CardContent, Card, Grid, Rating, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 function Search() {
   const dispatch = useDispatch();
@@ -62,6 +63,16 @@ function Search() {
     setSearchStatus(true);
   }
 
+
+  function handleAddFavourite(movieId) {
+    const json = {
+      movieId,
+      userId: authState?.data?.user?._id
+    };
+    console.log('here json', json)
+    dispatch(POST(addFavourite, '/accounts/addFavourite', json));
+  }
+
   function handleRateMovie(event) {
     event.preventDefault();
 
@@ -77,7 +88,38 @@ function Search() {
     };
 
     dispatch(POST(rateMovie, '/movies/rateMovie', json));
-  };
+  }
+
+  function genAllFeedback() {
+    let html = [];
+    movieState?.userRating?.movieDetail?.allFeedback?.map(item => {
+      html.push(
+        <>
+          <Grid item xs={2}>
+            <Typography component="legend" sx={{ color: "black" }}>{item.username}</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            {item.rating}<StarIcon sx={{ color: "yellow" }} />
+          </Grid>
+          <Grid item xs={8}>
+            <Typography sx={{ color: "black", wordWrap: "auto" }}>{item.feedback}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Divider sx={{ m: 1 }} />
+          </Grid>
+        </>
+      );
+    });
+    return html;
+  }
+
+  // search movie at 1st time
+  useEffect(() => {
+    const json = {
+      title: ""
+    };
+    dispatch(POST(searchMovie, '/movies/search', json));
+  }, []);
 
   // search movie
   useEffect(() => {
@@ -103,8 +145,10 @@ function Search() {
 
   useEffect(() => {
     if (movieState.getMovieSuccess) {
-      let rate = movieState?.userRating?.userrating?.rating || 0;
+      let rate = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == localStorage.getItem("token")?.user?._id)?.rating || 0;
+      let feedback = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == localStorage.getItem("token")?.user?._id)?.feedback || "";
       setUserRating(rate);
+      setFeedback(feedback);
     }
   }, [movieState.getMovieSuccess]);
 
@@ -112,58 +156,156 @@ function Search() {
     if (movieState.searchMovieSuccess) {
       let list = [];
       rows?.map(item => {
-        let movieDetail = item.movieDetail;
-        list.push(
-          movieDetail
-          // <StyledCard label={movieDetail.title} text={movieDetail.details.description} image={movieDetail.details.image} imageType={movieDetail.details.imageType} rating={movieDetail.rating} onClick={() => handleOpenEdit(movieDetail)} />
-        );
+        list.push(item.movieDetail);
       });
-
       setMovieCards(list);
     }
   }, [movieState.searchMovieSuccess]);
-  console.log('here list ', movieCards);
 
   return (
     <>
-      <StyledModal open={open.MovieDetail} onClose={() => { setEdit({}); setOpen({ ...open, MovieDetail: false }) }} title={"Movie Detail"} >
-        <Grid container sx={{ color: "black" }} textAlign={"center"} >
-          <Grid item xs={12}>
-            <Typography>Title: {edit?.title}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>Leading Actor / Actresse: </Typography>
-            {edit?.details?.leadingactor?.map((item) => { return (<Typography>Name: {item}</Typography>) })}
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>Director: {edit?.details?.director}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>Year of Release: {edit?.details?.release}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>Category: {edit?.details?.category}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography>Duration: {edit?.details?.duration}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography>Description: {edit?.details?.description}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>Rating: {edit?.rating}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>Rating count: {edit?.ratecount}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <StyledButton name={"rateMovie"} label={!authState?.data?.user?._id && !localStorage?.getItem('token')?.user?._id ? "Please Login Before You Rate":"Rate Movie"} onClick={() => setOpen({ ...open, Rate: true })} disabled={!authState?.data?.user?._id && !localStorage?.getItem('token')?.user?._id} />
-          </Grid>
-        </Grid>
+      <StyledModal open={open.MovieDetail} onClose={() => { setEdit({}); setOpen({ ...open, MovieDetail: false }) }} title={edit.title}
+        style={{
+          position: "absolute",
+          top: "10%",
+          left: "10%",
+          width: "80vw",
+          height: "40vw",
+          bgcolor: "#1E1E1E",
+          boxShadow: 24,
+          p: 2,
+          maxHeight: "90vh",
+          borderRadius: "5px"
+        }}
+      >
+        <div style={{ width: "75vw", height: "35vw", display: "flex", flexDirection: "row", borderRadius: "5px", marginLeft: "1.5vw" }}>
+          <div style={{ width: "70%", height: "100%", }}>
+            <iframe
+              title="video"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              style={{ width: "100%", height: "100%", borderRadius: "5px" }}
+            ></iframe>
+          </div>
+          <div style={{ width: "5%" }} />
+          <div style={{ width: "25%", height: "100%", display: "flex", flexDirection: "column" }}>
+            <div style={{ width: "100%", height: "90%", backgroundColor: "#ccc", borderRadius: "5px", overflow: "overlay", color: "black", textAlign: "left" }}>
+              <div style={{ textAlign: "center" }}>
+                <Typography>Movie Details</Typography>
+              </div>
+              <div>
+                <Typography>Leading Actor / Actresse: </Typography>
+                {edit?.details?.leadingactor?.map((item) => { return (<Typography>Name: {item}</Typography>) })}
+              </div>
+              <div>
+                <Divider sx={{ m: 1 }} />
+              </div>
+              <div>
+                <Typography>Director: {edit?.details?.director}</Typography>
+              </div>
+              <div>
+                <Divider sx={{ m: 1 }} />
+              </div>
+              <div>
+                <Typography>Year of Release: {edit?.details?.release}</Typography>
+              </div>
+              <div>
+                <Divider sx={{ m: 1 }} />
+              </div>
+              <div>
+                <Typography>Category: {edit?.details?.category}</Typography>
+              </div>
+              <div>
+                <Divider sx={{ m: 1 }} />
+              </div>
+              <div>
+                <Typography>Duration: {edit?.details?.duration}</Typography>
+              </div>
+              <div>
+                <Divider sx={{ m: 1 }} />
+              </div>
+              <Grid container>
+                <Grid item xs={6}>
+                  <Typography>Rating:</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Typography sx={{ mb: 0.5 }}>{edit?.rating}</Typography>
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: "left" }}>
+                      <StarIcon sx={{ color: 'yellow' }} />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography>Rating count:</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Typography sx={{ mb: 0.5 }}>{edit?.ratecount}</Typography>
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: "left" }}>
+                      <HowToRegIcon />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <div>
+                <Divider sx={{ m: 1 }} />
+              </div>
+              <div>
+                <Typography>Description: </Typography>
+                <div style={{ height: "50%", overflowY: "scroll" }}>
+                  <Typography>{edit?.details?.description}</Typography>
+                </div>
+              </div>
+            </div>
+            <div style={{ width: "100%", height: "5%" }}>
+              <Grid container>
+                <Grid item xs={6}>
+                  <StyledButton
+                    name={"addFavourite"}
+                    label={!authState?.data?.user?._id && !localStorage?.getItem('token')?.user?._id ? "Please Login Before You Can Add To Favourite" : "Add To Favourite"}
+                    onClick={() => handleAddFavourite(edit._id)} disabled={!authState?.data?.user?._id && !localStorage?.getItem('token')?.user?._id}
+                    sx={{ mt: 2 }}
+                    position={'center'}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <StyledButton
+                    name={"rateMovie"}
+                    label={!authState?.data?.user?._id && !localStorage?.getItem('token')?.user?._id ? "Please Login Before You Rate" : "Rate Movie"}
+                    onClick={() => setOpen({ ...open, Rate: true })} disabled={!authState?.data?.user?._id && !localStorage?.getItem('token')?.user?._id}
+                    sx={{ mt: 2 }}
+                    position={'center'}
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          </div>
+        </div>
       </StyledModal>
 
-      <StyledModal open={open.Rate} onClose={() => setOpen({ ...open, Rate: false })} title={edit.title}>
-        <SearchForm onSubmit={(e) => handleRateMovie(e)} submitText={"Rate"}>
+      <StyledModal open={open.Rate} onClose={() => setOpen({ ...open, Rate: false })} title={edit.title} width={'60vw'}>
+        <Container sx={{ maxHeight: 300, overflow: 'auto' }}>
+          <Grid container textAlign="left">
+            <Grid item xs={2}>
+              <Typography component="legend" sx={{ color: "black" }}>Username</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography component="legend" sx={{ color: "black" }}>Rating</Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography sx={{ color: "black", wordWrap: "auto" }}>Feedback</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Divider sx={{ m: 1 }} />
+            </Grid>
+            {movieState?.userRating?.movieDetail?.allFeedback?.length > 0 && genAllFeedback()}
+          </Grid>
+        </Container>
+        <SearchForm onSubmit={(e) => handleRateMovie(e)} submitText={"Rate"} cellWidth={{ minWidth: "40ch", width: "98%" }}>
           <Grid container spacing={2} textAlign={"center"} >
             <Grid item xs={6}>
               <Typography component="legend" sx={{ color: "black" }}>Rating</Typography>
@@ -190,7 +332,7 @@ function Search() {
               />
             </Grid>
           </Grid>
-          <TextSearch name={"feedback"} label={"Feedback"} defaultValue={movieState?.userRating?.userrating?.feedback} multiline variant={"outlined"} />
+          <TextSearch name={"feedback"} label={"Feedback"} defaultValue={feedback} multiline={5} variant={"outlined"} />
         </SearchForm>
       </StyledModal>
 
@@ -217,9 +359,6 @@ function Search() {
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
                         {item.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {item.details.description}
                       </Typography>
                       <StarIcon sx={{ color: "yellow" }} /> {Math.round(item.rating * 10) / 10}
                     </CardContent>

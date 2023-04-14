@@ -54,6 +54,30 @@ const movieSlice = createSlice({
             state.rateMovieSuccess = true;
         },
         rateMovieFail(state, payload) { },
+
+        addFavourite(state, payload) {
+            state.loading = true;
+            state.addFavouriteSuccess = false;
+        },
+        addFavouriteSuccess(state, payload) {
+            let rate = payload.resData.data;
+            state.loading = false;
+            state.rate = rate;
+            state.addFavouriteSuccess = true;
+        },
+        addFavouriteFail(state, payload) { },
+
+        getFavourite(state, payload) {
+            state.loading = true;
+            state.getFavouriteSuccess = false;
+        },
+        getFavouriteSuccess(state, payload) {
+            let userFavourite = payload.resData.data;
+            state.loading = false;
+            state.userFavourite = userFavourite;
+            state.getFavouriteSuccess = true;
+        },
+        getFavouriteFail(state, payload) { },
     }
 });
 
@@ -61,6 +85,9 @@ export const {
     rateMovie,
     rateMovieSuccess,
     rateMovieFail,
+    addFavourite,
+    addFavouriteSuccess,
+    addFavouriteFail,
     searchMovie,
     searchMovieSuccess,
     searchMovieFail,
@@ -70,6 +97,9 @@ export const {
     getMovie,
     getMovieSuccess,
     getMovieFail,
+    getFavourite,
+    getFavouriteSuccess,
+    getFavouriteFail,
 } = movieSlice.actions;
 export const selectMovie = (state) => state.movie;
 

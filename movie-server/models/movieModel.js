@@ -1,19 +1,20 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+// Movie collection
 const Movie = new Schema(
     {
         title: { type: String, required: true },
-        // movieid: { type: String, required: true },
         details: {
             leadingactor: { type: Array, default: [] },
             director: { type: String, required: true },
             release: { type: String, require: true },
             category: { type: Array, default: [] },
-            duration: { type: String, require: true },
+            duration: { type: String, require: false },
             description: { type: String, required: false },
-            image: {type: String, require: false},
-            imagetype: {type: String, require: false}
+            image: { type: String, require: false },
+            imagetype: { type: String, require: false },
+            trailer: { type: String, require: false }
         },
         rating: { type: Number, required: true },
         totalratesum: { type: Number, required: true, default: 0 },
