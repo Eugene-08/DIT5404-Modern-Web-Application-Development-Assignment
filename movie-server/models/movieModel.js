@@ -7,8 +7,8 @@ const Movie = new Schema(
         title: { type: String, required: true },
         details: {
             leadingactor: { type: Array, default: [] },
-            director: { type: String, required: true },
-            release: { type: String, require: true },
+            director: { type: Array, default: [] },
+            release: { type: String, require: false },
             category: { type: Array, default: [] },
             duration: { type: String, require: false },
             description: { type: String, required: false },

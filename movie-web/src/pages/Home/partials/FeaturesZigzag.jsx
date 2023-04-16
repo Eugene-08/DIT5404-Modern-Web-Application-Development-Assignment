@@ -33,7 +33,7 @@ function FeaturesZigzag() {
                     <svg className="w-3 h-3 fill-current text-green-500 mr-2 shrink-0" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
                     </svg>
-                    <span>Director: {item.details?.director}</span>
+                    <span>Director: {item.details?.director?.join(", ")}</span>
                   </li>
                   <li className="flex items-center mb-2">
                     <svg className="w-3 h-3 fill-current text-green-500 mr-2 shrink-0" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">

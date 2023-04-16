@@ -37,7 +37,7 @@ rateMovie = (req, res) => {
                 }
                 // If user already rated this movie -> update rating and feedback
                 if (user.ratedmovie.includes(mongoose.Types.ObjectId(body.movieid))) {
-                    const index = user.userrating.findIndex(movie =>  movie.movieid.toString() === body.movieid);
+                    const index = user.userrating.findIndex(movie => movie.movieid.toString() === body.movieid);
                     const oldRating = user.userrating[index]?.rating;
                     user.userrating[index].rating = parseInt(rating);
                     user.userrating[index].feedback = body.feedback;
@@ -126,7 +126,7 @@ search = (req, res) => {
     }
 
     // Search title like "string"
-    Movie.find({ title: { $regex: body.title } }, (err, movie) => {
+    Movie.find({ title: { $regex: new RegExp(body.title, "i") } }, (err, movie) => {
         if (!movie) {
             return res.status(404).json({
                 err,

@@ -18,7 +18,7 @@ function Search() {
   const movieState = useSelector(selectMovie);
   const authState = useSelector(selectAuth);
   const [open, setOpen] = useState({ MovieDetail: false, Rate: false });
-  const [search, setSearch] = useState({});
+  const [search, setSearch] = useState({title: ""});
   const [searchStatus, setSearchStatus] = useState(false);
   const [current, setCurrent] = useState(0);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -145,8 +145,8 @@ function Search() {
 
   useEffect(() => {
     if (movieState.getMovieSuccess) {
-      let rate = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == localStorage.getItem("token")?.user?._id)?.rating || 0;
-      let feedback = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == localStorage.getItem("token")?.user?._id)?.feedback || "";
+      let rate = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == authState?.data?.user?._id)?.rating || 0;
+      let feedback = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == authState?.data?.user?._id)?.feedback || "";
       setUserRating(rate);
       setFeedback(feedback);
     }
@@ -182,7 +182,7 @@ function Search() {
           <div style={{ width: "70%", height: "100%", }}>
             <iframe
               title="video"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              src={edit?.details?.trailer}
               style={{ width: "100%", height: "100%", borderRadius: "5px" }}
             ></iframe>
           </div>
@@ -193,14 +193,13 @@ function Search() {
                 <Typography>Movie Details</Typography>
               </div>
               <div>
-                <Typography>Leading Actor / Actresse: </Typography>
-                {edit?.details?.leadingactor?.map((item) => { return (<Typography>Name: {item}</Typography>) })}
+                <Typography>Leading Actor / Actresse: {edit?.details?.leadingactor?.join(", ")}</Typography>
               </div>
               <div>
                 <Divider sx={{ m: 1 }} />
               </div>
               <div>
-                <Typography>Director: {edit?.details?.director}</Typography>
+                <Typography>Director: {edit?.details?.director?.join(", ")}</Typography>
               </div>
               <div>
                 <Divider sx={{ m: 1 }} />
@@ -212,7 +211,7 @@ function Search() {
                 <Divider sx={{ m: 1 }} />
               </div>
               <div>
-                <Typography>Category: {edit?.details?.category}</Typography>
+                <Typography>Category: {edit?.details?.category?.join(", ")}</Typography>
               </div>
               <div>
                 <Divider sx={{ m: 1 }} />
@@ -346,18 +345,18 @@ function Search() {
           justifyContent: 'space-around',
           overflow: 'hidden',
         }}>
-          <ImageList className={{ flexWrap: 'nowrap' }} cols={2.5} rowHeight={300} >
+          <ImageList className={{ flexWrap: 'nowrap' }} cols={2.5} rowHeight={500} >
             {movieCards.map((item) => (
-              <ImageListItem key={item._id} style={{ height: 380, width: 200 }}>
+              <ImageListItem key={item._id} style={{ height: 500, width: 200 }}>
                 <Card sx={{ width: 200 }}>
                   <CardActionArea onClick={() => handleOpenEdit(item)}>
                     <CardMedia
                       component="img"
-                      height="140"
+                      height={380}
                       image={`data:image/${item.details.imageType};base64, ${item.details.image}`}
                     />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
+                    <CardContent sx={{ height: 120 }}>
+                      <Typography gutterBottom variant="h7" component="div">
                         {item.title}
                       </Typography>
                       <StarIcon sx={{ color: "yellow" }} /> {Math.round(item.rating * 10) / 10}
@@ -374,3 +373,5 @@ function Search() {
 }
 
 export default Search;
+
+<iframe width="1280" height="536" src="" title="His Only Son | Official Trailer | Angel Studios" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
