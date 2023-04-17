@@ -28,7 +28,7 @@ Trace:
 
 npm manifest: 
   {
-    "name": "movie-web-client",
+    "name": "web-client",
     "version": "0.1.0",
     "scripts": {
       "dev": "vite",

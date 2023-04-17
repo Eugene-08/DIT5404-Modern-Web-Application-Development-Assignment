@@ -1,5 +1,5 @@
 {
-  "name": "movie-web-client",
+  "name": "web",
   "version": "0.1.0",
   "scripts": {
     "start": "vite",
