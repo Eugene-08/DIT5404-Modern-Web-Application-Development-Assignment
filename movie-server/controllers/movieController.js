@@ -5,48 +5,48 @@ var mongoose = require('mongoose');
 // Rate movie
 /*
   {
-    userid: String,
-    movieid: String,
+    userId: String,
+    movieId: String,
     rating: Integer,
     feedback: String
   }
 */
-rateMovie = (req, res) => {
+const rateMovie = (req, res) => {
     const body = req.body;
     console.log(body);
     const rating = parseInt(body.rating);
-    if (!body.userid || !body.movieid || !body.rating) {
+    if (!body.userId || !body.movieId || !body.rating) {
         return res.status(400).json({
             success: false,
             error: "Bad request!",
         });
     }
-    Movie.findOne({ _id: body.movieid }, (err, movie) => {
+    Movie.findOne({ _id: body.movieId }, (err, movie) => {
         if (!movie) {
             return res.status(404).json({
                 err,
                 message: 'Movie not found!',
             });
         } else {
-            User.findOne({ _id: body.userid }, (err1, user) => {
+            User.findOne({ _id: body.userId }, (err1, user) => {
                 if (err1) {
                     return res.status(404).json({
                         err1,
                         message: 'User not found!',
-                    })
+                    });
                 }
                 // If user already rated this movie -> update rating and feedback
-                if (user.ratedmovie.includes(mongoose.Types.ObjectId(body.movieid))) {
-                    const index = user.userrating.findIndex(movie => movie.movieid.toString() === body.movieid);
-                    const oldRating = user.userrating[index]?.rating;
-                    user.userrating[index].rating = parseInt(rating);
-                    user.userrating[index].feedback = body.feedback;
-                    user.markModified('userrating');
+                if (user.ratedMovie.includes(mongoose.Types.ObjectId(body.movieId))) {
+                    const index = user.userRating.findIndex(movie => movie.movieId.toString() === body.movieId);
+                    const oldRating = user.userRating[index]?.rating;
+                    user.userRating[index].rating = parseInt(rating);
+                    user.userRating[index].feedback = body.feedback;
+                    user.markModified('userRating');
 
-                    // Save the rating to User.userrating
+                    // Save the rating to User.userRating
                     user.save().then(() => {
-                        movie.totalratesum += (parseInt(rating) - oldRating);
-                        movie.rating = movie.totalratesum / movie.ratecount;
+                        movie.totalRateSum += (parseInt(rating) - oldRating);
+                        movie.rating = movie.totalRateSum / movie.rateCount;
                         //  Update movie rating
                         movie.save().then(() => {
                             return res.status(200).json({
@@ -54,58 +54,58 @@ rateMovie = (req, res) => {
                                 rating: movie.rating,
                                 message: 'Movie rating successfully updated!',
                                 user: user,
-                            })
+                            });
                         }).catch(error => {
                             return res.status(500).json({
                                 error,
                                 message: 'User rating updated but movie rating data can not be updated!',
-                            })
-                        })
+                            });
+                        });
                     }).catch(error => {
                         return res.status(500).json({
                             error,
                             message: 'Can not update user rating!!',
-                        })
+                        });
                     });
                 } else {
                     // New rating
-                    user.ratedmovie.push(mongoose.Types.ObjectId(body.movieid));
-                    user.userrating.push({
+                    user.ratedMovie.push(mongoose.Types.ObjectId(body.movieId));
+                    user.userRating.push({
                         "title": body.title,
                         "rating": rating,
-                        "movieid": mongoose.Types.ObjectId(body.movieid),
+                        "movieId": mongoose.Types.ObjectId(body.movieId),
                         "feedback": body.feedback
                     });
                     // Insert new record
                     user.save().then(() => {
-                        movie.totalratesum += parseInt(rating)
-                        movie.ratecount++;
-                        movie.rating = movie.totalratesum / movie.ratecount;
+                        movie.totalRateSum += parseInt(rating)
+                        movie.rateCount++;
+                        movie.rating = movie.totalRateSum / movie.rateCount;
                         // Update movie rating
                         movie.save().then(() => {
                             return res.status(200).json({
                                 success: true,
                                 rating: movie.rating,
-                                newtotalrating: movie.totalratesum,
+                                newtotalrating: movie.totalRateSum,
                                 message: 'Movie rated successfully!',
                                 user: user,
-                            })
-                        })
+                            });
+                        });
                     }).catch(error => {
                         return res.status(500).json({
                             error,
                             message: 'User rating updated bou movie rating data not be updated!',
-                        })
-                    })
+                        });
+                    });
                 }
             }).catch(error => {
                 return res.status(500).json({
                     error,
                     message: 'Movie could not be updated!',
-                })
-            })
+                });
+            });
         }
-    })
+    });
 }
 
 // Search movies (default {title: ""})
@@ -114,7 +114,7 @@ rateMovie = (req, res) => {
         title: String
     }
 */
-search = (req, res) => {
+const search = (req, res) => {
     const body = req.body
     console.log(body);
 
@@ -137,7 +137,7 @@ search = (req, res) => {
                 success: true,
                 movie: movie?.map((item, index) => { return { movieDetail: item, id: index } }),
                 rowCount: movie.length
-            })
+            });
         }
     });
 }
@@ -145,11 +145,11 @@ search = (req, res) => {
 // Search movie by movie's id, gives all movie details and all feedbacks
 /*
     {
-        movieid: String,
-        userid: String
+        movieId: String,
+        userId: String
     }
 */
-searchByMovie = (req, res) => {
+const searchByMovie = (req, res) => {
     const body = req.body;
     console.log(body);
 
@@ -163,14 +163,14 @@ searchByMovie = (req, res) => {
         Movie.aggregate([
             {
                 $match: {
-                    _id: mongoose.Types.ObjectId(body.movieid),
+                    _id: mongoose.Types.ObjectId(body.movieId),
                 },
             },
             {
                 $lookup: {
                     from: "190508483_users",
                     localField: "_id",
-                    foreignField: "ratedmovie",
+                    foreignField: "ratedMovie",
                     as: "allFeedback",
                     let: {
                         id: "$_id",
@@ -178,7 +178,7 @@ searchByMovie = (req, res) => {
                     pipeline: [
                         {
                             $match: {
-                                "userrating.movieid": mongoose.Types.ObjectId(body.movieid),
+                                "userRating.movieId": mongoose.Types.ObjectId(body.movieId),
                             },
                         },
                     ],
@@ -191,12 +191,12 @@ searchByMovie = (req, res) => {
             },
             {
                 $unwind: {
-                    path: "$allFeedback.userrating",
+                    path: "$allFeedback.userRating",
                 },
             },
             {
                 $match: {
-                    "allFeedback.userrating.movieid": mongoose.Types.ObjectId(body.movieid),
+                    "allFeedback.userRating.movieId": mongoose.Types.ObjectId(body.movieId),
                 },
             },
             {
@@ -205,12 +205,12 @@ searchByMovie = (req, res) => {
                     title: "$title",
                     details: "$details",
                     rating: "$rating",
-                    totalratesum: "$totalratesum",
-                    ratecount: "$ratecount",
+                    totalRateSum: "$totalRateSum",
+                    rateCount: "$rateCount",
                     allFeedback: {
                         feedback:
-                            "$allFeedback.userrating.feedback",
-                        rating: "$allFeedback.userrating.rating",
+                            "$allFeedback.userRating.feedback",
+                        rating: "$allFeedback.userRating.rating",
                         username: "$allFeedback.username",
                         userId: "$allFeedback._id"
                     },
@@ -228,11 +228,11 @@ searchByMovie = (req, res) => {
                     rating: {
                         $first: "$rating",
                     },
-                    totalratesum: {
-                        $first: "$totalratesum",
+                    totalRateSum: {
+                        $first: "$totalRateSum",
                     },
-                    ratecount: {
-                        $first: "$ratecount",
+                    rateCount: {
+                        $first: "$rateCount",
                     },
                     allFeedback: {
                         $push: "$allFeedback",
@@ -249,15 +249,15 @@ searchByMovie = (req, res) => {
                 return res.status(200).json({
                     success: true,
                     movieDetail: movie.at(0)
-                })
+                });
             }
-        })
+        });
     }
 
 }
 
 // Search top 10 rating movies
-searchTopTen = (req, res) => {
+const searchTopTen = (req, res) => {
     // Search rating > 0, sort by rating desc
     Movie.find({ rating: { $gt: 0 } }).sort({ rating: -1 }).limit(10).then((movie) => {
         if (!movie) {
@@ -276,17 +276,17 @@ searchTopTen = (req, res) => {
             success: false,
             error: error,
             message: "No movie found!"
-        })
-    })
+        });
+    });
 }
 
 // Search user favourite movies
 /*
     {
-        userid: String
+        userId: String
     }
 */
-searchUserFavourite = (req, res) => {
+const searchUserFavourite = (req, res) => {
     const body = req.body;
     console.log(body);
 
@@ -298,11 +298,6 @@ searchUserFavourite = (req, res) => {
     }
 
     Movie.aggregate([
-        {
-            $match: {
-
-            }
-        },
         {
             $lookup: {
                 from: "190508483_users",

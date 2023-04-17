@@ -2,7 +2,7 @@
   "name": "movie-web-client",
   "version": "0.1.0",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "run-dev": "webpack serve --mode development",

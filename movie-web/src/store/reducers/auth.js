@@ -48,7 +48,7 @@ const authSlice = createSlice({
             state.loading = false;
             state.loginSuccess = false;
             localStorage.removeItem("token");
-            window.location.assign("/movie");
+            window.location.assign("/public");
         },
 
         signup(state, payload) {

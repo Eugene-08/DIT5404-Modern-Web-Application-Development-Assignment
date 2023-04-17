@@ -12,4 +12,5 @@ router.post('/searchByMovie', MovieController.searchByMovie);
 router.get('/searchTopTen', MovieController.searchTopTen);
 // Search user's favorite movies
 router.post('/searchUserFavourite', MovieController.searchUserFavourite);
+
 module.exports = router;

@@ -18,9 +18,9 @@ function FeaturesZigzag() {
           <div className="md:grid md:grid-cols-12 md:gap-6 items-center">
             {/* Image */}
             <div className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 rtl" data-aos="fade-up">
-              {console.log('here itemtype', item.details.imagetype)}
-              {item.details.imagetype && item.details.image && (
-                <img className="max-w-full mx-auto md:max-w-none h-auto" src={`data:image/${item.details?.imagetype};base64, ${item.details?.image}`} width="540" height="405" />
+              {console.log('here itemtype', item.details.imageType)}
+              {item.details.imageType && item.details.image && (
+                <img className="max-w-full mx-auto md:max-w-none h-auto" src={`data:image/${item.details?.imageType};base64, ${item.details?.image}`} width="540" height="405" />
               )}
             </div>
             {/* Content */}
@@ -52,8 +52,8 @@ function FeaturesZigzag() {
           <div className="md:grid md:grid-cols-12 md:gap-6 items-center">
             {/* Image */}
             <div className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1" data-aos="fade-up">
-              {item.details.imagetype && item.details.image && (
-                <img className="max-w-full mx-auto md:max-w-none h-auto" src={`data:image/${item.details.imagetype};base64, ${item.details.image}`} width="540" height="405" />
+              {item.details.imageType && item.details.image && (
+                <img className="max-w-full mx-auto md:max-w-none h-auto" src={`data:image/${item.details.imageType};base64, ${item.details.image}`} width="540" height="405" />
               )}
             </div>
             {/* Content */}

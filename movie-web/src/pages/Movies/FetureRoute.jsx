@@ -7,7 +7,6 @@ import AOS from 'aos';
 import Main from './Main';
 
 function FetureRoute() {
-    const location = useLocation();
 
     return (
         <Routes>

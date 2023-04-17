@@ -6,8 +6,8 @@ const User = new Schema(
     {
         username: { type: String, required: true },
         password: { type: String, required: true },
-        ratedmovie: { type: Array, default: [] },
-        userrating: { type: Array, default: [] },
+        ratedMovie: { type: Array, default: [] },
+        userRating: { type: Array, default: [] },
         favourite: { type: Array, default: [] },
     },
     { timestamps: true },

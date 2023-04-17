@@ -1,7 +1,7 @@
 const User = require("../models/userModels");
-const Movie = require('../models/movieModel');
 const bcrypt = require("bcrypt");
 var mongoose = require('mongoose');
+
 // User signup
 /*
   {
@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
     password: String
   }
 */
-createUser = async (req, res) => {
+const createUser = async (req, res) => {
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -19,12 +19,19 @@ createUser = async (req, res) => {
   }
   const user = new User(body);
   if (!user) {
-    return res.status(400).json({ success: false, error: err });
+    return res.status(400).json({
+      success: false,
+      error: err
+    });
   }
   const salt = await bcrypt.genSalt(8);
   user.password = await bcrypt.hash(user.password, salt);
   user.save().then(() => {
-    return res.status(200).json({ success: true, message: "User created successfully", user: user });
+    return res.status(200).json({
+      success: true,
+      message: "User created successfully",
+      user: user
+    });
   }).catch((error) => {
     return res.status(400).json({
       error,
@@ -39,15 +46,23 @@ createUser = async (req, res) => {
     username: String
   }
 */
-verifyUser = async (req, res) => {
+const verifyUser = async (req, res) => {
   await User.findOne({ username: req.body.username }, (err, user) => {
     if (err) {
-      return res.status(400).json({ success: false, error: err });
+      return res.status(400).json({
+        success: false,
+        error: err
+      });
     }
     if (user == null) {
-      return res.status(200).json({ success: true });
+      return res.status(200).json({
+        success: true
+      });
     }
-    return res.status(200).json({ success: false, message: "Account Exist" });
+    return res.status(200).json({
+      success: false, message:
+        "Account Exist"
+    });
   }).catch((err) => console.log(err));
 };
 
@@ -58,7 +73,7 @@ verifyUser = async (req, res) => {
     password: String
   }
 */
-login = async (req, res) => {
+const login = async (req, res) => {
   const body = req.body;
   if (body.username && body.password) {
 
@@ -67,25 +82,41 @@ login = async (req, res) => {
       // Verify username and password
       const validPassword = await bcrypt.compare(body.password, user.password);
       if (validPassword) {
-        res.status(200).json({ success: true, message: "Login Success", user: user });
+        res.status(200).json({
+          success: true,
+          message: "Login Success",
+          user: user
+        });
       } else {
-        res.status(400).json({ success: false, message: "Invalid Password", user: null });
+        res.status(400).json({
+          success: false,
+          message: "Invalid Password",
+          user: null
+        });
       }
     } else {
-      res.status(401).json({ success: false, message: "User does not exist", user: null });
+      res.status(401).json({
+        success: false,
+        message: "User does not exist",
+        user: null
+      });
     }
   } else {
-    res.status(400).json({ success: false, message: "Please enter all require fields", user: null });
+    res.status(400).json({
+      success: false,
+      message: "Please enter all require fields",
+      user: null
+    });
   }
 };
 
 // Search user favourite movies
 /*
     {
-        userid: String
+        userId: String
     }
 */
-searchUserFavourite = (req, res) => {
+const searchUserFavourite = (req, res) => {
   const body = req.body;
   console.log(body);
 
@@ -99,7 +130,7 @@ searchUserFavourite = (req, res) => {
   User.aggregate([
     {
       "$match": {
-        _id: mongoose.Types.ObjectId(body.userid),
+        _id: mongoose.Types.ObjectId(body.userId),
       },
     },
     {
@@ -134,11 +165,11 @@ searchUserFavourite = (req, res) => {
 // Add favourite movie
 /**
   {
-    movieid: String,
-    userid: String
+    movieId: String,
+    userId: String
   }
 */
-addFavourite = (req, res) => {
+const addFavourite = (req, res) => {
   const body = req.body;
   console.log(body);
 

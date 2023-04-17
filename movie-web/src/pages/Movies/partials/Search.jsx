@@ -18,7 +18,7 @@ function Search() {
   const movieState = useSelector(selectMovie);
   const authState = useSelector(selectAuth);
   const [open, setOpen] = useState({ MovieDetail: false, Rate: false });
-  const [search, setSearch] = useState({title: ""});
+  const [search, setSearch] = useState({ title: "" });
   const [searchStatus, setSearchStatus] = useState(false);
   const [current, setCurrent] = useState(0);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -41,8 +41,8 @@ function Search() {
 
   function handleOpenEdit(e) {
     let json = {
-      movieid: e._id,
-      userid: authState?.data?.user?._id || localStorage?.getItem('token')?.user?._id,
+      movieId: e._id,
+      userId: authState?.data?.user?._id || localStorage?.getItem('token')?.user?._id,
     };
     dispatch(POST(getMovie, '/movies/searchByMovie', json));
     setEdit(e);
@@ -81,9 +81,9 @@ function Search() {
 
     let json = {
       title: edit.title,
-      movieid: edit._id,
+      movieId: edit._id,
       rating: userRating == null || isNaN(userRating) ? 0 : userRating,
-      userid: authState?.data?.user?._id || localStorage?.getItem('token')?.user?._id,
+      userId: authState?.data?.user?._id || localStorage?.getItem('token')?.user?._id,
       feedback: feedback,
     };
 
@@ -145,8 +145,8 @@ function Search() {
 
   useEffect(() => {
     if (movieState.getMovieSuccess) {
-      let rate = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == authState?.data?.user?._id)?.rating || 0;
-      let feedback = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userid == authState?.data?.user?._id)?.feedback || "";
+      let rate = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userId == authState?.data?.user?._id)?.rating || 0;
+      let feedback = movieState?.userRating?.movieDetail?.allFeedback?.find(x => x.userId == authState?.data?.user?._id)?.feedback || "";
       setUserRating(rate);
       setFeedback(feedback);
     }
@@ -167,8 +167,9 @@ function Search() {
       <StyledModal open={open.MovieDetail} onClose={() => { setEdit({}); setOpen({ ...open, MovieDetail: false }) }} title={edit.title}
         style={{
           position: "absolute",
-          top: "10%",
-          left: "10%",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           width: "80vw",
           height: "40vw",
           bgcolor: "#1E1E1E",
@@ -193,7 +194,7 @@ function Search() {
                 <Typography>Movie Details</Typography>
               </div>
               <div>
-                <Typography>Leading Actor / Actresse: {edit?.details?.leadingactor?.join(", ")}</Typography>
+                <Typography>Leading Actor / Actresse: {edit?.details?.leadingActor?.join(", ")}</Typography>
               </div>
               <div>
                 <Divider sx={{ m: 1 }} />
@@ -242,7 +243,7 @@ function Search() {
                 <Grid item xs={6}>
                   <Grid container>
                     <Grid item xs={6} sx={{ textAlign: "right" }}>
-                      <Typography sx={{ mb: 0.5 }}>{edit?.ratecount}</Typography>
+                      <Typography sx={{ mb: 0.5 }}>{edit?.rateCount}</Typography>
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: "left" }}>
                       <HowToRegIcon />
@@ -373,5 +374,3 @@ function Search() {
 }
 
 export default Search;
-
-<iframe width="1280" height="536" src="" title="His Only Son | Official Trailer | Angel Studios" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>

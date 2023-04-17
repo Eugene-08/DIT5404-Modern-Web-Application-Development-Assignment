@@ -13,5 +13,5 @@ yarn
 
 #### Compiles and hot-reloads for frontend development
 ```
-yarn dev
+yarn start
 ```

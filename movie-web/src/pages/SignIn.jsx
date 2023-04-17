@@ -37,15 +37,10 @@ function SignIn() {
     <div className="flex flex-col min-h-screen overflow-hidden">
 
       {/*  Site header */}
-      <Header />
+       {/* <Header /> */}
 
       {/*  Page content */}
       <main className="grow">
-
-        {/*  Page illustration */}
-        <div className="relative max-w-6xl mx-auto h-0 pointer-events-none" aria-hidden="true">
-          <PageIllustration />
-        </div>
 
         <section className="relative">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -53,7 +48,7 @@ function SignIn() {
 
               {/* Page header */}
               <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-                <h1 className="h1">Welcome back. We exist to make entrepreneurship easier.</h1>
+                <h1 className="h1">Please Login</h1>
               </div>
 
               {/* Form */}
@@ -73,7 +68,7 @@ function SignIn() {
 
       </main>
 
-      <Banner />
+      {/* <Banner /> */}
 
     </div>
   );

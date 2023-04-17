@@ -6,19 +6,19 @@ const Movie = new Schema(
     {
         title: { type: String, required: true },
         details: {
-            leadingactor: { type: Array, default: [] },
+            leadingActor: { type: Array, default: [] },
             director: { type: Array, default: [] },
             release: { type: String, require: false },
             category: { type: Array, default: [] },
             duration: { type: String, require: false },
             description: { type: String, required: false },
             image: { type: String, require: false },
-            imagetype: { type: String, require: false },
+            imageType: { type: String, require: false },
             trailer: { type: String, require: false }
         },
         rating: { type: Number, required: true },
-        totalratesum: { type: Number, required: true, default: 0 },
-        ratecount: { type: Number, required: true, default: 0 },
+        totalRateSum: { type: Number, required: true, default: 0 },
+        rateCount: { type: Number, required: true, default: 0 },
     },
     { timestamps: true },
 )
