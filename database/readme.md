@@ -2,9 +2,9 @@
 
 ### Project setup
 
-#### CD to ./database/190508483_movieDB
+#### CD to ./190508483_movieDB
 ```
-cd ./database/190508483_movieDB
+cd ./190508483_movieDB
 ```
 #### Use mongorestore in cmd
 ```

@@ -10,10 +10,15 @@ or
 ```
 npm install yarn
 ```
-#### Use yarn to add all packages
-```
-yarn
-```
 
-#### Total of 2 terminals are used
+#### Total of 4 commands are used
+##### Please cd to each file and read the readme
+```
+cd ./database
+```
+```
+cd ./server
+```
+```
+cd ./web
 ```
