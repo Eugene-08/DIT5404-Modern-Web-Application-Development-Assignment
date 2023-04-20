@@ -22,3 +22,6 @@ cd ./server
 ```
 cd ./web
 ```
+
+### Document
+##### All documents are located in "document" folder
