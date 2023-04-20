@@ -118,6 +118,17 @@ const search = (req, res) => {
     const body = req.body
     console.log(body);
 
+    const findJson = body.categories?.length > 0 ? {
+        // Search title like "string" && search movies contains categories
+        title: { $regex: new RegExp(body.title, "i") },
+        'details.category': {
+            $in: body.categories
+        }
+    } : {
+        // Search title like "string"
+        title: { $regex: new RegExp(body.title, "i") },
+    };
+
     if (!body) {
         return res.status(400).json({
             success: false,
@@ -125,8 +136,7 @@ const search = (req, res) => {
         })
     }
 
-    // Search title like "string"
-    Movie.find({ title: { $regex: new RegExp(body.title, "i") } }, (err, movie) => {
+    Movie.find(findJson, (err, movie) => {
         if (!movie) {
             return res.status(404).json({
                 err,
@@ -329,6 +339,52 @@ const searchUserFavourite = (req, res) => {
 
 }
 
+const getAllCategories = (req, res) => {
+    Movie.aggregate([
+        {
+            $project: {
+                "details.category": 1,
+            },
+        },
+        {
+            $group: {
+                _id: "$details.category",
+            },
+        },
+        {
+            $unwind: {
+                path: "$_id",
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                categories: {
+                    $addToSet: "$_id",
+                },
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                categories: 1,
+            },
+        }
+    ]).exec((error, result) => {
+        if (!error) {
+            return res.status(200).json({
+                success: true,
+                categories: result[0].categories
+            });
+        } else {
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error"
+            });
+        }
+    });
+}
+
 module.exports = {
-    rateMovie, search, searchByMovie, searchTopTen, searchUserFavourite
+    rateMovie, search, searchByMovie, searchTopTen, searchUserFavourite, getAllCategories
 }

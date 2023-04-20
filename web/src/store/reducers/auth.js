@@ -1,7 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Cookies from "universal-cookie";
-import moment from "moment";
-import { dateTimeFormat } from '../../utils/Constant';
 const initialState = {
     loading: false,
     data: "",
@@ -57,7 +54,7 @@ const authSlice = createSlice({
         },
         signupSuccess(state, payload) {
             let user = payload.resData.data;
-            console.log('here signup success', user)
+            console.log('signup success', user)
             state.loading = false;
             state.data = user;
             state.signupSuccess = true;

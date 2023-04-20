@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { responseCode, responseMessage } from "../../utils/MessageUtil";
 
 const initialState = {
     loading: false,
@@ -16,35 +15,13 @@ const utilSlice = createSlice({
         },
         handleResPopupMessage(state, payload) {
             let res = payload.resData;
-            console.log('in util: payload', payload)
+            console.log('in util: payload', payload);
             let errorMsg = "Error: Cannot read properties of undefined (reading 'message')" ;
             state.message = {
                 message: res?.message == errorMsg ? errorMsg : res?.message,
                 severity: "error",
                 autoHideDuration: 3000
             };
-            // if (JSON.stringify(res)?.includes("Error")) {
-            //     console.log("catch error state", state)
-            //     console.log("catch error payload", payload?.resData)
-            //     console.log("catch error res", JSON.stringify(res.message))
-            //     if (JSON.stringify(res.message) == "Error: Cannot read properties of undefined (reading 'message')" && localStorage.getItem("token") != null) {
-            //         state.message = {
-            //             message: res?.message == "Error: Cannot read properties of undefined (reading 'message')" ? res?.message : "Logout Success",
-            //             severity: "error",
-            //             autoHideDuration: 3000
-            //         };
-            //     } else {
-            //         state.message = {
-            //             message: "Logout Success",
-            //             severity: "success",
-            //             autoHideDuration: 3000
-            //         };
-            //     }
-            // } else {
-            //     console.log("in util: false payload", payload);
-            //     let message = "";
-
-            // }
         },
         handleSetPopupMessage(state, { payload }) {
             state.message = payload.msg;

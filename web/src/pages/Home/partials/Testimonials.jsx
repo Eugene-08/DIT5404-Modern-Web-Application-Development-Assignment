@@ -2,11 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../utils/APIService";
 import moment from 'moment';
-import { Typography, Paper } from "@mui/material";
-import styles from "../../../utils/index.module.css";
-import { Container } from '../../../utils/Container';
-import { SearchForm, TextSearch } from '../../../utils/FormUtil';
-import { dateFormat, timeFormat } from '../../../utils/Constant';
 import { selectMovie, getFavourite } from '../../../store/reducers/movie';
 import { selectAuth } from '../../../store/reducers/auth';
 
@@ -58,7 +53,7 @@ function Testimonials() {
   }
 
   useEffect(() => {
-    if (authState.loginSuccess && authState.data.user._id) {
+    if (authState.loginSuccess && authState?.data?.user?._id) {
       let json = {
         userId: authState.data.user._id
       };

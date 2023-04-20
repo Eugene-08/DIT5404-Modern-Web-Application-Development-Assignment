@@ -19,6 +19,9 @@ import {
     getFavourite,
     getFavouriteSuccess,
     getFavouriteFail,
+    getAllCategories,
+    getAllCategoriesSuccess,
+    getAllCategoriesFail,
 } from "../reducers/movie";
 
 function* searchTopTenCaller({ payload }) {
@@ -39,6 +42,9 @@ function* addFavouriteCaller({ payload }) {
 function* getFavouriteCaller({ payload }) {
     yield sagaBuild({ payload, successType: getFavouriteSuccess, failType: getFavouriteFail });
 }
+function* getAllCategoriesCaller({ payload }) {
+    yield sagaBuild({ payload, successType: getAllCategoriesSuccess, failType: getAllCategoriesFail });
+}
 
 export default function* movie() {
     yield takeEvery(searchTopTen.type, searchTopTenCaller);
@@ -47,4 +53,5 @@ export default function* movie() {
     yield takeEvery(rateMovie.type, rateMovieCaller);
     yield takeEvery(addFavourite.type, addFavouriteCaller);
     yield takeEvery(getFavourite.type, getFavouriteCaller);
+    yield takeEvery(getAllCategories.type, getAllCategoriesCaller);
 }

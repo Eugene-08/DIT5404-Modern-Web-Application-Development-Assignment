@@ -78,6 +78,18 @@ const movieSlice = createSlice({
             state.getFavouriteSuccess = true;
         },
         getFavouriteFail(state, payload) { },
+
+        getAllCategories(state, payload) {
+            state.loading = true,
+                state.getAllCategoriesSuccess = false;
+        },
+        getAllCategoriesSuccess(state, payload) {
+            let getAllCategories = payload.resData.data;
+            state.loading = false;
+            state.getAllCategories = getAllCategories;
+            state.getAllCategoriesSuccess = true;
+        },
+        getAllCategoriesFail(state, payload) { },
     }
 });
 
@@ -100,6 +112,9 @@ export const {
     getFavourite,
     getFavouriteSuccess,
     getFavouriteFail,
+    getAllCategories,
+    getAllCategoriesSuccess,
+    getAllCategoriesFail,
 } = movieSlice.actions;
 export const selectMovie = (state) => state.movie;
 

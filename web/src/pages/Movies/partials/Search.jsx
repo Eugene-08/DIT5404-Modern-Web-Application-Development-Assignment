@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { POST } from '../../../utils/APIService';
+import { GET, POST } from '../../../utils/APIService';
 import { SearchForm, TextSearch } from '../../../utils/FormUtil';
 import { Container } from '../../../utils/Container';
 import { StyledModal } from '../../../utils/StyleModal';
 import { StyledButton } from '../../../utils/Button';
-import { selectMovie, searchMovie, rateMovie, getMovie, addFavourite } from '../../../store/reducers/movie';
+import { selectMovie, searchMovie, rateMovie, getMovie, addFavourite, getAllCategories } from '../../../store/reducers/movie';
 import { selectAuth } from '../../../store/reducers/auth';
 import { handleSetPopupMessage } from '../../../store/reducers/util';
 import { ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core';
 import { CardActionArea, Typography, CardMedia, CardContent, Card, Grid, Rating, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import { StyledAutocomplete } from '../../../utils/StyledAutocomplete';
 
 function Search() {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ function Search() {
   const [sortFields, setSortFields] = useState("title");
 
   const [movieCards, setMovieCards] = useState([]);
+  const [searchByCategory, setSearchByCategory] = useState();
 
   const [edit, setEdit] = useState({});
   const [rating, setRating] = useState(0);
@@ -38,6 +40,8 @@ function Search() {
     setSortOrder(event[0]?.sort);
     setSortFields(event[0]?.field);
   };
+
+  let categoryList = movieState?.getAllCategories?.categories?.map(item => { return { value: item, display: item } });
 
   function handleOpenEdit(e) {
     let json = {
@@ -54,9 +58,11 @@ function Search() {
 
     const data = new FormData(event.currentTarget);
     let title = data.get("title");
+    let categories = searchByCategory?.map(item => item.value);
 
     let json = {
       title,
+      categories,
     };
 
     setSearch(json);
@@ -69,7 +75,7 @@ function Search() {
       movieId,
       userId: authState?.data?.user?._id
     };
-    console.log('here json', json)
+    
     dispatch(POST(addFavourite, '/accounts/addFavourite', json));
   }
 
@@ -119,6 +125,7 @@ function Search() {
       title: ""
     };
     dispatch(POST(searchMovie, '/movies/search', json));
+    dispatch(GET(getAllCategories, '/movies/getAllCategories'));
   }, []);
 
   // search movie
@@ -339,6 +346,7 @@ function Search() {
       <Container>
         <SearchForm onSubmit={(e) => handleSearch(e)} submitText={"Search"}>
           <TextSearch name={"title"} label={"Title"} />
+          <StyledAutocomplete label={"Categories"} list={categoryList} value={"value"} display={"value"} inputValue={searchByCategory} setInputValue={setSearchByCategory} />
         </SearchForm>
         <div className={{
           display: 'flex',
