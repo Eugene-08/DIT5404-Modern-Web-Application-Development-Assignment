@@ -290,55 +290,6 @@ const searchTopTen = (req, res) => {
     });
 }
 
-// Search user favourite movies
-/*
-    {
-        userId: String
-    }
-*/
-const searchUserFavourite = (req, res) => {
-    const body = req.body;
-    console.log(body);
-
-    if (!body) {
-        return res.status(400).json({
-            success: false,
-            error: "Bad request!"
-        });
-    }
-
-    Movie.aggregate([
-        {
-            $lookup: {
-                from: "190508483_users",
-                localField: "favourite",
-                foreignField: "_id",
-                as: "userFavouriteMovies"
-            }
-        },
-        { $unwind: "$userFavouriteMovies" },
-        {
-            $group: {
-                "_id": null,
-                userFavouriteMovies: "$userFavouriteMovies"
-            }
-        }
-    ]).exec((error, result) => {
-        if (!error) {
-            return res.status(200).json({
-                success: true,
-                userFavouriteMovies: result
-            });
-        } else {
-            return res.status(200).json({
-                success: true,
-                message: "No user's favourite movies were found!"
-            });
-        }
-    });
-
-}
-
 const getAllCategories = (req, res) => {
     Movie.aggregate([
         {
@@ -386,5 +337,5 @@ const getAllCategories = (req, res) => {
 }
 
 module.exports = {
-    rateMovie, search, searchByMovie, searchTopTen, searchUserFavourite, getAllCategories
+    rateMovie, search, searchByMovie, searchTopTen, getAllCategories
 }
