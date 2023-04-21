@@ -10,7 +10,12 @@ router.post('/search', MovieController.search);
 router.post('/searchByMovie', MovieController.searchByMovie);
 // Search top 10 movies
 router.get('/searchTopTen', MovieController.searchTopTen);
-// Search user's favorite movies
-router.post('/searchUserFavourite', MovieController.searchUserFavourite);
+
+// Restrict other request paths and methods
+router.all('/*', (req, res) => {
+    return res.status(405).json({
+        error: "Method not allowed"
+    });
+});
 
 module.exports = router;
