@@ -13,4 +13,12 @@ router.post('/searchUserFavourite', UserController.searchUserFavourite);
 // Add movie to user favourite
 router.post('/addFavourite', UserController.addFavourite);
 
+// Restrict other request paths and methods
+router.all('/*', (req, res) => {
+    return res.status(405).json({
+        error: "Method not allowed"
+    });
+});
+
+
 module.exports = router;
