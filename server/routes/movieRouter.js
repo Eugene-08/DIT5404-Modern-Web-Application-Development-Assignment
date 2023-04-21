@@ -12,7 +12,5 @@ router.post('/searchByMovie', MovieController.searchByMovie);
 router.get('/searchTopTen', MovieController.searchTopTen);
 // Search user's favorite movies
 router.post('/searchUserFavourite', MovieController.searchUserFavourite);
-// Get all categories
-router.get('/getAllCategories', MovieController.getAllCategories);
 
 module.exports = router;
